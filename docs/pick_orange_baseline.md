@@ -37,6 +37,17 @@ contrôle, ou employer son dossier local v3 avec `--dataset-root`. Ne pas
 
 La conversion de données LeIsaac HDF5 vers v3 documentée actuellement par LeIsaac demande `lerobot==0.4.2`; elle ne rend pas automatiquement le dataset PickOrange v2.1 compatible avec notre pin 0.4.1. Pour ce dataset déjà au format LeRobot v2.1, le convertisseur officiel 0.4.1 ci-dessus est la voie retenue.
 
+### Exécution locale vérifiée
+
+Le 2 août 2026, la révision Hugging Face
+`fa6e0625d814352b8e6ee1c6d2482194e4da8ed3` a été téléchargée localement
+(environ 0,65 Go avant conversion) et convertie avec LeRobot 0.4.1, sans
+publication. Le convertisseur a conservé le v2.1 dans
+`datasets/lerobot_cache/LightwheelAI/leisaac-pick-orange_old` et a placé le v3
+dans `datasets/lerobot_cache/LightwheelAI/leisaac-pick-orange`. Le cache fait
+environ 1,4 Go pour conserver les deux versions. Ces chemins sont ignorés par
+Git ; les emplacements peuvent donc être adaptés sans changer le dépôt.
+
 ## Inspection et visualisation
 
 Avant conversion, l'inspection télécharge uniquement `meta/info.json` et `meta/episodes.jsonl`, écrit un rapport et s'arrête avec le code 2, ce qui documente correctement le blocage :
