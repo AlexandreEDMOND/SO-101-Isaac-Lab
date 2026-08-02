@@ -79,6 +79,26 @@ def _default_output_dir(mode: str) -> Path:
     return Path("outputs/training") / f"act_pick_orange_{mode}"
 
 
+def latest_checkpoint_config(output_dir: Path) -> Path | None:
+    """Return the newest local LeRobot checkpoint configuration, if any."""
+
+    checkpoint_root = output_dir / "checkpoints"
+    legacy = checkpoint_root / "last/pretrained_model/train_config.json"
+    if legacy.is_file():
+        return legacy
+    candidates = list(checkpoint_root.glob("*/pretrained_model/train_config.json"))
+    if not candidates:
+        return None
+
+    def checkpoint_order(path: Path) -> int:
+        try:
+            return int(path.parents[1].name)
+        except ValueError:
+            return -1
+
+    return max(candidates, key=checkpoint_order)
+
+
 def compatibility_report_allows_training(report_path: Path) -> tuple[bool, str]:
     """Return whether a report has no explicitly blocking compatibility failure."""
 
@@ -102,7 +122,9 @@ def compatibility_report_allows_training(report_path: Path) -> tuple[bool, str]:
 def build_command(args: argparse.Namespace) -> tuple[list[str], Path]:
     output_dir = args.output_dir or _default_output_dir(args.mode)
     if args.resume:
-        checkpoint_config = output_dir / "checkpoints/last/pretrained_model/train_config.json"
+        checkpoint_config = latest_checkpoint_config(output_dir)
+        if checkpoint_config is None:
+            checkpoint_config = output_dir / "checkpoints/last/pretrained_model/train_config.json"
         command = ["lerobot-train", f"--config_path={checkpoint_config}", "--resume=true"]
     else:
         command = [
@@ -140,10 +162,11 @@ def _validate_runtime(args: argparse.Namespace, output_dir: Path) -> bool:
     if not _cuda_report():
         return False
     if args.resume:
-        expected = output_dir / "checkpoints/last/pretrained_model/train_config.json"
-        if not expected.is_file():
+        checkpoint_config = latest_checkpoint_config(output_dir)
+        if checkpoint_config is None:
             print(
-                f"Cannot resume: checkpoint configuration not found at {expected}.", file=sys.stderr
+                f"Cannot resume: checkpoint configuration not found under {output_dir / 'checkpoints'}.",
+                file=sys.stderr,
             )
             return False
     elif output_dir.exists():

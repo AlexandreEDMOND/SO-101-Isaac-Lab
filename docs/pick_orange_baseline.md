@@ -107,6 +107,20 @@ python scripts/train_act_pick_orange.py \
 
 Le lanceur n'exécute rien sans `--run`, vérifie CUDA, le GPU, la VRAM, `lerobot-train` et la version exacte 0.4.1. LeRobot enregistre la configuration effective dans chaque checkpoint ; le lanceur capture également son stdout localement. Weights & Biases reste opt-in avec `--wandb`.
 
+### Smoke test exécuté
+
+Le 2 août 2026, le smoke test a été exécuté sur la RTX 3090 avec la copie v3
+locale : 20 étapes, batch 2, deux caméras et état 6D. La loss enregistrée est
+passée de `67,801` (step 5) à `15,006` (step 20) en 10,7 secondes. Les
+checkpoints locaux `000010` et `000020` ont été créés ; `checkpoints/last`
+pointe vers `000020` et sa reprise a rechargé les poids et l'état d'entraînement
+avec succès. Aucun checkpoint ni métrique n'est versionné.
+
+LeRobot 0.4.1 doit conserver `transformers>=4.53,<5`. Une version 5.x peut
+s'installer par erreur dans un environnement partagé, mais elle est
+incompatible avec les contraintes déclarées par LeRobot et bloque le lanceur
+avant l'entraînement.
+
 Entraînement de référence RTX 3090 (100 000 étapes, batch 8, 4 workers) :
 
 ```bash

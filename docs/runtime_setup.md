@@ -25,6 +25,7 @@ cd third_party/IsaacLab && ./isaaclab.sh --install && cd ../..
 git clone --branch v0.4.0 --recursive https://github.com/LightwheelAI/leisaac.git third_party/leisaac
 uv pip install -e "third_party/leisaac/source/leisaac[lerobot]"
 uv pip install lerobot==0.4.1 numpy==1.26.0
+uv pip install "transformers>=4.53,<5"
 uv pip install -e ".[dev]"
 ```
 

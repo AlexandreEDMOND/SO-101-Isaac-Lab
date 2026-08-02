@@ -1,7 +1,11 @@
 from __future__ import annotations
 
 from scripts.inspect_dataset import parse_args as parse_inspect_args
-from scripts.train_act_pick_orange import build_command, compatibility_report_allows_training
+from scripts.train_act_pick_orange import (
+    build_command,
+    compatibility_report_allows_training,
+    latest_checkpoint_config,
+)
 from scripts.train_act_pick_orange import parse_args as parse_train_args
 
 
@@ -36,6 +40,16 @@ def test_resume_uses_checkpoint_configuration() -> None:
     command, _ = build_command(args)
     assert "--config_path=run/checkpoints/last/pretrained_model/train_config.json" in command
     assert "--resume=true" in command
+
+
+def test_latest_checkpoint_config_uses_highest_numeric_checkpoint(tmp_path) -> None:
+    for step in (10, 20):
+        config = tmp_path / "checkpoints" / f"{step:06d}" / "pretrained_model" / "train_config.json"
+        config.parent.mkdir(parents=True)
+        config.write_text("{}", encoding="utf-8")
+    assert latest_checkpoint_config(tmp_path) == (
+        tmp_path / "checkpoints/000020/pretrained_model/train_config.json"
+    )
 
 
 def test_train_parser_accepts_compatibility_gate() -> None:
