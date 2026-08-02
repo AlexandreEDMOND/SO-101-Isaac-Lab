@@ -6,13 +6,13 @@ Cette roadmap est séquentielle : une phase ne démarre que lorsque ses critère
 
 Cette baseline utilise [`LightwheelAI/leisaac-pick-orange`](https://huggingface.co/datasets/LightwheelAI/leisaac-pick-orange). Elle ne requiert ni SO-101 Leader physique ni téléopération. Le dataset brut reste hors Git et toute conversion travaille sur une copie.
 
-1. **Télécharger et figer le dataset brut.** Conserver identifiant, révision et métadonnées ; ne jamais ajouter dataset, vidéos ou checkpoints à Git. Hors périmètre : modifier la source.
-2. **Inspecter schéma et épisodes.** Vérifier les deux caméras, état/action 6D, FPS, codec, NaN et bornes sur des frames réelles. Les unités inconnues restent explicitement inconnues. Hors périmètre : supposer l'ordre ou les unités.
-3. **Convertir une copie vers LeRobotDataset v3.** Employer le convertisseur officiel v2.1→v3 et vérifier que LeRobot 0.4.1 charge bien la copie. Hors périmètre : réécrire manuellement les actions ou publier automatiquement sur Hugging Face.
-4. **Reproduire l'environnement historique au plus près.** Épingler versions, robot, scène, caméras et fréquence ; marquer chaque fait `confirmed`, `inferred` ou `unknown`. Hors périmètre : annoncer une reproduction exacte sans commit et métadonnées de collecte.
-5. **Valider par replay et comparaison visuelle.** Rejouer des actions converties dans Isaac Sim et comparer états, fréquence et images. Le replay reste non déterministe si l'état initial de scène manque. Hors périmètre : contourner un mismatch par reshape ou normalisation arbitraire.
-6. **Entraîner ACT sur le dataset validé.** Faire d'abord un smoke test (forward, backward, checkpoint, reprise), puis un entraînement RTX 3090 reproductible avec losses locales. Hors périmètre : entraînement long automatique ou autres politiques.
-7. **Évaluer ACT dans la simulation correspondante.** Exécuter plusieurs épisodes avec le même schéma d'observation/action, produire vidéos, trajectoires, succès et causes d'échec. Hors périmètre : revendiquer une évaluation exacte tant que scène/commit/états initiaux historiques restent inconnus.
+1. [x] **Télécharger et figer le dataset brut.** Révision `fa6e0625d814352b8e6ee1c6d2482194e4da8ed3` téléchargée hors Git. Hors périmètre : modifier la source.
+2. [x] **Inspecter schéma et épisodes.** Deux caméras, état/action 6D, 30 Hz, codec, NaN et bornes ont été vérifiés ; l'épisode 0 a été visualisé. Les unités restent explicitement inconnues.
+3. [x] **Convertir une copie vers LeRobotDataset v3.** Le convertisseur officiel v2.1→v3 de LeRobot 0.4.1 a produit une copie locale, qui est chargée et inspectée avec l'API LeRobot. Hors périmètre : réécrire manuellement les actions ou publier automatiquement sur Hugging Face.
+4. [x] **Reproduire l'environnement historique au plus près.** La pile actuelle a été inspectée en runtime : SO-101, ordre articulaire, deux caméras, résolutions et fréquence sont confirmés ; le rapport ne contient aucun échec bloquant. Le commit et l'état initial historiques restent inconnus : ce n'est pas une reproduction exacte.
+5. [ ] **Valider par replay et comparaison visuelle.** Rejouer des actions converties dans Isaac Sim et comparer états, fréquence et images. Le replay reste non déterministe si l'état initial de scène manque. Hors périmètre : contourner un mismatch par reshape ou normalisation arbitraire.
+6. [ ] **Entraîner ACT sur le dataset validé.** Faire d'abord un smoke test (forward, backward, checkpoint, reprise), puis un entraînement RTX 3090 reproductible avec losses locales. Hors périmètre : entraînement long automatique ou autres politiques.
+7. [ ] **Évaluer ACT dans la simulation correspondante.** Exécuter plusieurs épisodes avec le même schéma d'observation/action, produire vidéos, trajectoires, succès et causes d'échec. Hors périmètre : revendiquer une évaluation exacte tant que scène/commit/états initiaux historiques restent inconnus.
 
 Les scripts de téléopération restent disponibles pour une future tâche personnalisée, mais ne font pas partie de cette baseline active.
 
