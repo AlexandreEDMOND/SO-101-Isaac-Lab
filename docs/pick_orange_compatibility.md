@@ -60,6 +60,19 @@ l'assiette ne sont pas publiées. Les artefacts locaux, hors Git, sont
 `outputs/compatibility/replay/episode_000_action_replay.json` et
 `outputs/compatibility/replay/episode_000_trajectory_comparison.png`.
 
+Les replays complémentaire court, médian et long utilisent aussi la seed de
+reset `42`, sans terminaison anticipée :
+
+| Épisode | Frames / durée dataset | RMSE globale (radians) | Erreur max (radians) |
+| --- | ---: | ---: | ---: |
+| 53 (court) | 349 / 11,63 s | 0,0459 | 0,5013 |
+| 5 (médian) | 553 / 18,43 s | 0,0430 | 0,5013 |
+| 26 (long) | 1 053 / 35,10 s | 0,0354 | 0,5014 |
+
+Ces chiffres valident la cohérence du replay articulaire, pas une métrique de
+succès de tâche. Les rapports et graphiques de ces trois épisodes sont dans
+`outputs/compatibility/replay/` et restent volontairement hors Git.
+
 Le prétraitement image de LeRobot 0.4.1 pour une observation Gym RGB est : HWC
 `uint8` → BCHW `float32` → division par 255. Les caméras du dataset sont encodées
 en AV1/yuv420p : une comparaison visuelle doit utiliser les frames décodées,
