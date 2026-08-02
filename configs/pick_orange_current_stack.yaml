@@ -1,0 +1,54 @@
+# Frozen project contract for LeIsaac v0.4.0 / Isaac Lab v2.3.0.
+# The runtime inspector must recalculate and verify all source-derived values.
+environment_id: LeIsaac-SO101-PickOrange-v0
+environment_fingerprint: sha256:9a826b30392eaf6fe593fdc133d7f0d5185da374c588ab46bbf7a903dba5fcfe
+software:
+  python: "3.11"
+  isaac_sim: "5.1.0"
+  isaac_lab: "v2.3.0"
+  leisaac: "v0.4.0"
+  leisaac_commit: "1651c321e9b0c1bb54233211fc7b3cd70d8373d5"
+  lerobot: "0.4.1"
+robot:
+  type: so101_follower
+  asset_path: assets/robots/so101_follower.usd
+  joint_order: [shoulder_pan, shoulder_lift, elbow_flex, wrist_flex, wrist_roll, gripper]
+  initial_joint_position_radians: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+actions:
+  dimension: 6
+  order: [shoulder_pan.pos, shoulder_lift.pos, elbow_flex.pos, wrist_flex.pos, wrist_roll.pos, gripper.pos]
+  environment_type: absolute_joint_position
+  environment_units: radians
+  dataset_encoding: absolute_joint_target_radians_from_ik
+state:
+  dimension: 6
+  order: [shoulder_pan.pos, shoulder_lift.pos, elbow_flex.pos, wrist_flex.pos, wrist_roll.pos, gripper.pos]
+  dataset_encoding: measured_joint_position_radians
+cameras:
+  front:
+    observation_key: observation.images.front
+    environment_name: front
+    prim_path: "{ENV_REGEX_NS}/Robot/base/front_camera"
+    resolution_hwc: [480, 640, 3]
+    offset_ros_wxyz: {position: [0.0, -0.5, 0.6], quaternion_wxyz: [0.1650476, -0.9862856, 0.0, 0.0]}
+  wrist:
+    observation_key: observation.images.wrist
+    environment_name: wrist
+    prim_path: "{ENV_REGEX_NS}/Robot/gripper/wrist_camera"
+    resolution_hwc: [480, 640, 3]
+    offset_ros_wxyz: {position: [-0.001, 0.1, -0.04], quaternion_wxyz: [-0.404379, -0.912179, -0.0451242, 0.0486914]}
+simulation:
+  physics_frequency_hz: 60
+  render_frequency_hz: 60
+  control_frequency_hz: 60
+  camera_frequency_hz: 30
+  recording_frequency_hz: 30
+  decimation: 1
+  episode_length_seconds: 25
+  temporal_policy: sample_one_absolute_joint_action_every_two_60hz_control_steps
+randomization:
+  enabled: []
+  disabled: [orange001_pose, orange002_pose, orange003_pose, plate_pose, front_camera_pose]
+success:
+  condition: all_three_oranges_in_plate_and_rest_pose
+seeds: [0, 1, 2, 3, 4]

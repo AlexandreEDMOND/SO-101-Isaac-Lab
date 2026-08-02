@@ -1,0 +1,27 @@
+# LeRobot 0.4.1 configuration. Replace dataset.repo_id with a converted v3 repo.
+dataset:
+  repo_id: LightwheelAI/leisaac-pick-orange
+  video_backend: pyav
+
+policy:
+  type: act
+  chunk_size: 20
+  n_action_steps: 20
+  # Avoid an implicit ImageNet weight download during the smoke test.
+  pretrained_backbone_weights: null
+  optimizer_lr: 0.00001
+  optimizer_weight_decay: 0.0001
+  optimizer_lr_backbone: 0.00001
+
+output_dir: outputs/training/act_pick_orange_smoke
+job_name: act_pick_orange_smoke
+seed: 1000
+num_workers: 0
+batch_size: 2
+steps: 20
+eval_freq: 0
+log_freq: 5
+save_checkpoint: true
+save_freq: 10
+wandb:
+  enable: false

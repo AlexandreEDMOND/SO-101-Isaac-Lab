@@ -1,0 +1,23 @@
+# The runner records the frozen environment fingerprint beside the training log.
+dataset:
+  repo_id: CHANGE_ME/current-stack-pick-orange-smoke-v3
+  video_backend: pyav
+policy:
+  type: act
+  chunk_size: 20
+  n_action_steps: 20
+  pretrained_backbone_weights: null
+  optimizer_lr: 0.00001
+  optimizer_weight_decay: 0.0001
+  optimizer_lr_backbone: 0.00001
+output_dir: outputs/training/act_pick_orange_current_stack_smoke
+job_name: act_pick_orange_current_stack_smoke
+seed: 0
+num_workers: 0
+batch_size: 2
+steps: 100
+eval_freq: 0
+log_freq: 10
+save_checkpoint: true
+save_freq: 50
+wandb: {enable: false}

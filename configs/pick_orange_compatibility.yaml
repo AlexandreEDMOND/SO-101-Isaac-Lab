@@ -1,0 +1,320 @@
+# Historical/dataset-side contract. Each leaf records evidence, never a silent default.
+dataset:
+  repository:
+    value: LightwheelAI/leisaac-pick-orange
+    status: confirmed
+    source: https://huggingface.co/datasets/LightwheelAI/leisaac-pick-orange
+    notes: Uploaded 2025-07-30; revision fa6e0625d814352b8e6ee1c6d2482194e4da8ed3.
+  format_version:
+    value: v2.1
+    status: confirmed
+    source: meta/info.json at fa6e0625d814352b8e6ee1c6d2482194e4da8ed3
+    notes: Must be converted to v3 for LeRobot 0.4.1; conversion does not establish simulation equivalence.
+  task:
+    value: Grab orange and place into plate
+    status: confirmed
+    source: meta/tasks.jsonl
+    notes: One task and 60 episodes.
+software:
+  python:
+    value: 3.10
+    status: inferred
+    source: Plausible historical LeIsaac README at commit 5ff548dcc6b67ec5170cd539f01fb84d6bace0c0.
+    notes: Dataset card does not record it; project target Python 3.11 is not historical evidence.
+  isaac_sim:
+    value: 4.5.0
+    status: inferred
+    source: Plausible historical LeIsaac README at commit 5ff548dcc6b67ec5170cd539f01fb84d6bace0c0.
+    notes: Dataset card does not record it; exact collection commit remains absent.
+  isaac_lab:
+    value: v2.1.0
+    status: inferred
+    source: Plausible historical LeIsaac README at commit 5ff548dcc6b67ec5170cd539f01fb84d6bace0c0.
+    notes: Dataset card does not record it; exact collection commit remains absent.
+  leisaac:
+    value: 5ff548dcc6b67ec5170cd539f01fb84d6bace0c0
+    status: inferred
+    source: Latest public LeIsaac commit before dataset upload, dated 2025-07-28.
+    notes: Exact collection commit is absent from the dataset. Do not treat this as a pin.
+  lerobot:
+    value: 26cb4614c961e6da04e4b83b6178331f4150650d
+    status: inferred
+    source: scripts/convert/isaaclab2lerobot.py at the plausible historical LeIsaac commit.
+    notes: The dataset does not store this commit; converter comment is strong but indirect evidence.
+  pytorch_cuda:
+    value: PyTorch 2.5.1 / CUDA 11.8
+    status: inferred
+    source: Plausible historical LeIsaac README at commit 5ff548dcc6b67ec5170cd539f01fb84d6bace0c0.
+    notes: Not persisted in dataset metadata.
+  current_project_target:
+    value: Python 3.11; Isaac Sim 5.1.0; Isaac Lab 2.3.x; LeIsaac v0.4.0; LeRobot 0.4.1
+    status: confirmed
+    source: docs/technical_research.md and LeIsaac v0.4.0 tag 1651c321e9b0c1bb54233211fc7b3cd70d8373d5
+    notes: This is a candidate evaluation stack, not the historical stack.
+robot:
+  type:
+    value: so101_follower
+    status: confirmed
+    source: meta/info.json
+    notes: LeIsaac calls the asset SO101 Follower.
+  asset_path:
+    value: assets/robots/so101_follower.usd
+    status: inferred
+    source: LeIsaac 2025-07-28 assets/robots/lerobot.py
+    notes: The USD itself is not in this repository; no hash is available locally.
+  asset_sha256:
+    value: null
+    status: unknown
+    source: Asset not downloaded.
+    notes: Runtime inspector must calculate it from the installed file.
+  joint_order:
+    value: [shoulder_pan, shoulder_lift, elbow_flex, wrist_flex, wrist_roll, gripper]
+    status: confirmed
+    source: Dataset feature names and historical action_process.py
+    notes: Dataset names append .pos.
+  joint_limits_degrees:
+    value: [[-110, 110], [-100, 100], [-100, 90], [-95, 95], [-160, 160], [-10, 100]]
+    status: inferred
+    source: Plausible historical LeIsaac assets/robots/lerobot.py
+    notes: Limits must be read from the installed USD/runtime before evaluation.
+  initial_joint_position_radians:
+    value: [0, 0, 0, 0, 0, 0]
+    status: inferred
+    source: Plausible historical LeIsaac ArticulationCfg.InitialStateCfg.
+    notes: Teleoperation and reset may modify it.
+  actuators:
+    value: implicit STS3215; effort_limit_sim=10; velocity_limit_sim=10; stiffness=17.8; damping=0.60
+    status: inferred
+    source: Plausible historical LeIsaac assets/robots/lerobot.py
+    notes: Runtime inspector is authoritative.
+actions:
+  dimension:
+    value: 6
+    status: confirmed
+    source: meta/info.json
+    notes: One value per follower joint.
+  joint_order:
+    value: [shoulder_pan.pos, shoulder_lift.pos, elbow_flex.pos, wrist_flex.pos, wrist_roll.pos, gripper.pos]
+    status: confirmed
+    source: meta/info.json
+    notes: Must not be reordered.
+  command_type:
+    value: absolute_joint_position
+    status: inferred
+    source: Historical so101leader uses JointPositionActionCfg(scale=1.0).
+    notes: Dataset does not identify the teleop device; verify against HDF5 or a replay.
+  units_before_dataset_conversion:
+    value: radians
+    status: inferred
+    source: Historical leader preprocessing maps motor degrees to USD degrees then radians.
+    notes: Environment command units, not dataset units.
+  dataset_units:
+    value: lerobot_motor_coordinate
+    status: inferred
+    source: Historical converter maps radians to [-100,100] for arm and [0,100] for gripper.
+    notes: Dataset statistics agree numerically; values are not raw radians or physical degrees.
+  dataset_bounds:
+    value: [[-100, 100], [-100, 100], [-100, 100], [-100, 100], [-100, 100], [0, 100]]
+    status: inferred
+    source: Historical converter LEROBOT_JOINT_POS_LIMIT_RANGE.
+    notes: Sampled data need not reach bounds; clipping behavior is not recorded.
+  clipping:
+    value: unknown
+    status: unknown
+    source: No clipping in historical converter source; underlying controller/USD behavior unavailable.
+    notes: Must be inspected at runtime.
+  teleop_preprocessing:
+    value: leader_motor_normalized_to_usd_degrees_to_radians
+    status: inferred
+    source: Historical action_process.py convert_action_from_so101_leader.
+    notes: Exact device, calibration and motor limits are absent from dataset.
+state:
+  dimension:
+    value: 6
+    status: confirmed
+    source: meta/info.json
+    notes: Matches action names and order.
+  joint_order:
+    value: [shoulder_pan.pos, shoulder_lift.pos, elbow_flex.pos, wrist_flex.pos, wrist_roll.pos, gripper.pos]
+    status: confirmed
+    source: meta/info.json
+    notes: Must not be reordered.
+  units:
+    value: lerobot_motor_coordinate
+    status: inferred
+    source: Historical converter preprocess_joint_pos and published statistics.
+    notes: No per-dataset unit declaration exists.
+  normalization:
+    value: affine_per_joint_usd_degree_to_motor_coordinate
+    status: inferred
+    source: Historical converter preprocess_joint_pos.
+    notes: ACT may normalize again internally; that is distinct from this conversion.
+  relative_to_action:
+    value: same_hdf5_frame_index
+    status: inferred
+    source: Historical converter reads actions[i] and joint_pos[i] into the same LeRobot frame.
+    notes: Whether HDF5 state was pre- or post-action is unknown.
+cameras:
+  front:
+    dataset_key:
+      value: observation.images.front
+      status: confirmed
+      source: meta/info.json
+      notes: Required ACT input.
+    environment_name:
+      value: front
+      status: inferred
+      source: Historical PickOrangeSceneCfg.
+      notes: Runtime inspector must verify it.
+    prim_path:
+      value: "{ENV_REGEX_NS}/Robot/base/front_camera"
+      status: inferred
+      source: Historical PickOrangeSceneCfg.
+      notes: ROS convention; fixed mount but reset randomization moves the front camera.
+    mount:
+      value: robot_base_fixed
+      status: inferred
+      source: Historical PickOrangeSceneCfg.
+      notes: The front pose is randomized at reset.
+    extrinsics_ros_wxyz:
+      value: {position: [0.0, -0.5, 0.6], quaternion_wxyz: [0.1650476, -0.9862856, 0.0, 0.0]}
+      status: inferred
+      source: Historical PickOrangeSceneCfg.
+      notes: ROS convention stated in source.
+    intrinsics:
+      value: {focal_length_mm: 28.7, horizontal_aperture_mm: 38.11, focus_distance: 400.0, clipping_range_m: [0.01, 50.0]}
+      status: inferred
+      source: Historical PickOrangeSceneCfg.
+      notes: PinholeCameraCfg.
+    recorded_resolution:
+      value: [480, 640, 3]
+      status: confirmed
+      source: meta/info.json
+      notes: HWC RGB video.
+    codec:
+      value: av1/yuv420p
+      status: confirmed
+      source: meta/info.json
+      notes: Lossy compression; image decoder must be held constant where possible.
+    preprocessing:
+      value: none_before_video_encoding
+      status: inferred
+      source: Historical converter passes front_images directly.
+      notes: No crop/resize is in the converter; image transforms in ACT remain to be explicitly configured.
+    randomization:
+      value: translation_±0.05m_rotation_±5deg
+      status: inferred
+      source: Historical PickOrangeEnvCfg domain_randomization.
+      notes: The historical commit is inferred.
+  wrist:
+    dataset_key:
+      value: observation.images.wrist
+      status: confirmed
+      source: meta/info.json
+      notes: Required ACT input.
+    environment_name:
+      value: wrist
+      status: inferred
+      source: Historical PickOrangeSceneCfg.
+      notes: Runtime inspector must verify it.
+    prim_path:
+      value: "{ENV_REGEX_NS}/Robot/gripper/wrist_camera"
+      status: inferred
+      source: Historical PickOrangeSceneCfg.
+      notes: Attached to gripper; ROS convention.
+    mount:
+      value: gripper_attached
+      status: inferred
+      source: Historical PickOrangeSceneCfg.
+      notes: No wrist pose randomization in the historical config.
+    extrinsics_ros_wxyz:
+      value: {position: [-0.001, 0.1, -0.04], quaternion_wxyz: [-0.404379, -0.912179, -0.0451242, 0.0486914]}
+      status: inferred
+      source: Historical PickOrangeSceneCfg.
+      notes: ROS convention stated in source.
+    intrinsics:
+      value: {focal_length_mm: 36.5, horizontal_aperture_mm: 36.83, focus_distance: 400.0, clipping_range_m: [0.01, 50.0]}
+      status: inferred
+      source: Historical PickOrangeSceneCfg.
+      notes: PinholeCameraCfg.
+    recorded_resolution:
+      value: [480, 640, 3]
+      status: confirmed
+      source: meta/info.json
+      notes: HWC RGB video.
+    codec:
+      value: av1/yuv420p
+      status: confirmed
+      source: meta/info.json
+      notes: Lossy compression.
+    preprocessing:
+      value: none_before_video_encoding
+      status: inferred
+      source: Historical converter passes wrist_images directly.
+      notes: No crop/resize is in the converter.
+    randomization:
+      value: none_configured
+      status: inferred
+      source: Historical PickOrangeEnvCfg domain_randomization.
+      notes: Only front camera is randomized in the plausible historical configuration.
+simulation:
+  physics_timestep_hz:
+    value: unknown
+    status: unknown
+    source: Not set in historical PickOrangeEnvCfg or dataset metadata.
+    notes: Must be extracted from installed runtime.
+  render_timestep_hz:
+    value: unknown
+    status: unknown
+    source: Not set in historical PickOrangeEnvCfg or dataset metadata.
+    notes: Cameras request update_period=1/30s, which is not proof of renderer rate.
+  decimation:
+    value: 1
+    status: inferred
+    source: Historical PickOrangeEnvCfg.
+    notes: Evaluation runtime must confirm.
+  control_frequency_hz:
+    value: 60
+    status: inferred
+    source: Historical teleop_se3_agent.py --step_hz default.
+    notes: CLI overrides and actual loop overruns are not recorded.
+  teleop_frequency_hz:
+    value: 60
+    status: inferred
+    source: Historical teleop_se3_agent.py RateLimiter default.
+    notes: Same uncertainty as control frequency.
+  dataset_frequency_hz:
+    value: 30
+    status: confirmed
+    source: meta/info.json and timestamps n/30 in meta/episodes_stats.jsonl.
+    notes: Converter sets fps=30 and keeps every HDF5 frame after skipping first five; no resampling code exists.
+  action_repeat_physics_steps:
+    value: unknown
+    status: unknown
+    source: Need historical Isaac Lab sim.dt and actual CLI command.
+    notes: Do not force evaluation to 30 Hz without a temporal adapter decision.
+  max_episode_duration_seconds:
+    value: unknown
+    status: unknown
+    source: Historical teleop script disables timeout; dataset ranges 11.63–35.10s at declared 30Hz.
+    notes: Historical env cfg's 8s timeout was disabled during recording.
+  reset_logic:
+    value: manual_success_then_reset
+    status: inferred
+    source: Historical teleop script maps N to success and R to reset; it disables normal success/timeout terms.
+    notes: Dataset lacks scene seed/initial object states.
+  success_condition:
+    value: operator_marked_success
+    status: inferred
+    source: Historical teleop script sets success termination to ones only after N callback.
+    notes: Not an automatic task geometry label during collection.
+  object_randomization:
+    value: oranges_and_plate_translation_±0.05m
+    status: inferred
+    source: Historical PickOrangeEnvCfg domain_randomization.
+    notes: Exact historical commit remains unconfirmed.
+  seed:
+    value: null
+    status: unknown
+    source: Dataset metadata has no seed or scene state.
+    notes: Exact episode replay is impossible from published data alone.

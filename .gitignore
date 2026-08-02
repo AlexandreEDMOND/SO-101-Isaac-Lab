@@ -1,0 +1,67 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+.venv/
+venv/
+env/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+coverage.xml
+htmlcov/
+build/
+dist/
+*.egg-info/
+
+# Editors and operating systems
+.vscode/
+.idea/
+.DS_Store
+
+# Isaac Sim / Omniverse local state
+_isaac_sim/
+_isaaclab/
+isaac-sim/
+isaaclab/
+omniverse.log
+kit.log
+kit_*.log
+logs/
+cache/
+data/Kit/
+data/ov/
+extsUser/
+
+# Generated experiment data (never version datasets, videos, or checkpoints)
+datasets/
+data/datasets/
+outputs/
+runs/
+wandb/
+tensorboard/
+checkpoints/
+*.ckpt
+*.pt
+*.pth
+*.onnx
+*.safetensors
+*.mp4
+*.avi
+*.mov
+*.mkv
+*.hdf5
+*.h5
+*.parquet
+
+# Downloaded / externally licensed assets
+assets/downloaded/
+assets/cache/
+third_party/
+src/so101_sorting/assets/downloaded/
+src/so101_sorting/assets/cache/
+*.usd
+*.usda
+*.usdc

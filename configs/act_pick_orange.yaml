@@ -1,0 +1,27 @@
+# Reproducible RTX 3090 baseline for LeRobot 0.4.1.
+# Set dataset.repo_id to a v3 conversion of LightwheelAI/leisaac-pick-orange.
+dataset:
+  repo_id: LightwheelAI/leisaac-pick-orange
+  video_backend: pyav
+
+policy:
+  type: act
+  chunk_size: 50
+  n_action_steps: 50
+  pretrained_backbone_weights: null
+  optimizer_lr: 0.00001
+  optimizer_weight_decay: 0.0001
+  optimizer_lr_backbone: 0.00001
+
+output_dir: outputs/training/act_pick_orange
+job_name: act_pick_orange
+seed: 1000
+num_workers: 4
+batch_size: 8
+steps: 100000
+eval_freq: 0
+log_freq: 100
+save_checkpoint: true
+save_freq: 10000
+wandb:
+  enable: false
