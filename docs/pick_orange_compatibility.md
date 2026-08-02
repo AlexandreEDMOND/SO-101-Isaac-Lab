@@ -43,6 +43,23 @@ sortie ACT doit faire le chemin inverse fourni par LeIsaac
 `convert_lerobot_action_to_leisaac`; passer les six valeurs directement à
 `env.step()` serait une incompatibilité bloquante.
 
+### Replay runtime exécuté
+
+Le 2 août 2026, l'épisode v3 `0` (774 frames, 25,8 s) a été rejoué sur la pile
+actuelle avec une nouvelle seed `42`. Chaque action dataset à 30 Hz a été
+convertie avec `convert_lerobot_action_to_leisaac`, puis maintenue deux pas dans
+l'environnement à 60 Hz. La limite d'épisode de l'environnement a été étendue
+uniquement pour ce replay de 25,0 s à 25,817 s afin d'éviter un reset pendant
+les dernières frames ; cette adaptation est enregistrée dans le rapport.
+
+Le résultat est une RMSE articulaire globale de `0,0438` radian (environ 2,5°),
+sans reset durant la trajectoire. Cela confirme le chemin de conversion et le
+maintien temporel des actions pour cet épisode ; ce n'est **pas** une preuve de
+succès de tâche, puisque les poses initiales historiques des oranges et de
+l'assiette ne sont pas publiées. Les artefacts locaux, hors Git, sont
+`outputs/compatibility/replay/episode_000_action_replay.json` et
+`outputs/compatibility/replay/episode_000_trajectory_comparison.png`.
+
 Le prétraitement image de LeRobot 0.4.1 pour une observation Gym RGB est : HWC
 `uint8` → BCHW `float32` → division par 255. Les caméras du dataset sont encodées
 en AV1/yuv420p : une comparaison visuelle doit utiliser les frames décodées,

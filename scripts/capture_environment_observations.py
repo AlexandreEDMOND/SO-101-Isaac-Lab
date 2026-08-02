@@ -98,6 +98,7 @@ def main(argv: list[str] | None = None) -> int:
     try:
         import gymnasium as gym
         import leisaac  # noqa: F401
+        import torch
         from isaaclab_tasks.utils import parse_env_cfg
 
         output_dir = args.output_dir
@@ -116,6 +117,13 @@ def main(argv: list[str] | None = None) -> int:
         for seed in args.seeds:
             env.seed(seed)
             observations, _ = env.reset()
+            zero_action = torch.zeros(
+                (env.num_envs, env.action_manager.total_action_dim), device=env.device
+            )
+            # Cameras may need a few rendered frames after a reset before their
+            # buffers contain a stable image instead of a startup artifact.
+            for _ in range(3):
+                observations, _, _, _, _ = env.step(zero_action)
             policy_observations = observations.get("policy", observations)
             for name in ("front", "wrist"):
                 raw = to_uint8_hwc(policy_observations[name])

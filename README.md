@@ -88,6 +88,20 @@ ensuite seulement, nous reproduirons son environnement, rejouerons quelques
 actions et entraînerons ACT. La [roadmap](docs/roadmap.md) donne les sept étapes
 et la [note de baseline](docs/pick_orange_baseline.md) contient les commandes.
 
+### Extraits des démonstrations humaines
+
+Les vidéos restent hébergées par le dataset public : le dépôt ne les copie pas.
+Chaque lien ouvre la vue frontale d'un épisode complet de prise et dépôt d'une
+orange dans l'assiette.
+
+- [▶ Épisode 000](https://huggingface.co/datasets/LightwheelAI/leisaac-pick-orange/resolve/main/videos/chunk-000/observation.images.front/episode_000000.mp4)
+- [▶ Épisode 030](https://huggingface.co/datasets/LightwheelAI/leisaac-pick-orange/resolve/main/videos/chunk-000/observation.images.front/episode_000030.mp4)
+- [▶ Épisode 059](https://huggingface.co/datasets/LightwheelAI/leisaac-pick-orange/resolve/main/videos/chunk-000/observation.images.front/episode_000059.mp4)
+
+La planche locale qui juxtapose les caméras frontale et poignet de l'épisode 0
+est produite dans `outputs/dataset_inspection/` après l'inspection ; elle reste
+hors Git avec les autres artefacts générés.
+
 Les scripts de téléopération et de collecte locale sont conservés pour une
 future tâche personnalisée, mais ne font pas partie du chemin actif.
 
